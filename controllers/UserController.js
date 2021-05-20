@@ -1,6 +1,7 @@
 var UserModel = require('../models/UserModel.js');
 var config = require('../config');
 var bcrypt = require('bcrypt');
+// var jwt = require('jsonwebtoken');
 
 
 module.exports = {

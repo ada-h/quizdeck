@@ -4,6 +4,7 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const appstorage = require("./utils/nodepersist");
 
 
 let mongoose = require('mongoose'); // for working w/ our database
@@ -12,7 +13,12 @@ let config = require('./config');
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database, { useUnifiedTopology: true, useFindAndModify: false, useNewUrlParser: true });
 
+if(!appstorage.get("blacklist")) { //for setting the stage for storing expired tokens.
+  appstorage.set("blacklist", []);
+}
+
 const userRoutes = require('./routes/UserRoutes');
+const deckRoutes = require('./routes/DeckRoutes')
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,6 +42,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', userRoutes);
+app.use('/deck', deckRoutes);
 
 app.use(function(req, res) {
   return res.status(404).send({ message: 'The url you visited does not exist' });

@@ -1,7 +1,7 @@
 var UserModel = require('../models/UserModel.js');
 var config = require('../config');
 var bcrypt = require('bcrypt');
-// var jwt = require('jsonwebtoken');
+var jwt = require('jsonwebtoken');
 
 
 module.exports = {
@@ -78,22 +78,22 @@ module.exports = {
             }
 
             else {
-                // var token = jwt.sign({
-                //     email: user.email,
-                //     _id: user._id,
-                //     role: user.role
-                // }, secret, {
-                //     expiresIn: 86400000 * 30 // expires in 30 days
-                // });
+                var token = jwt.sign({
+                    email: user.email,
+                    _id: user._id,
+                    role: user.role
+                }, config.secret, {
+                    expiresIn: 86400000 * 30 // expires in 30 days
+                });
                 return res.status(200).json({
                     success: true,
                     message: 'Login successful!',
-                    // token: token
+                    token: token,
+                    data: user
                 });
 
             }
         } catch (error) {
-
             return res.status(500).json({
                 message: 'Error processing requests.',
                 error: error

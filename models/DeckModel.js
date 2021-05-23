@@ -7,7 +7,7 @@ var DeckSchema = new Schema({
     'description': String,
     'public': Boolean,
 	'deckguests': {type: Schema.Types.ObjectId, ref: 'User'},
-    'deckquestions': {type: Schema.Types.ObjectId, ref: 'Question'},
+    'deckquestions': [{type: Schema.Types.ObjectId, ref: 'Question'}],
     'deckgenerator': String,
 
 });

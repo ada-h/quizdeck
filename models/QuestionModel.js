@@ -1,13 +1,15 @@
 var mongoose = require('mongoose');
 var Schema   = mongoose.Schema;
 
-var QuizesSchema = new Schema({
+var QuestionSchema = new Schema({
 	'createdon' : {type: Date, default: Date.now},
-    'type': String,
-    'question': String,
+    'type': Number,
+    'title': String,
 	'questionguests': {type: Schema.Types.ObjectId, ref: 'User'},
-    'questionhist': String
+    'questiondeck': String,
+    'questionoptions': Array,
+    'answer': String
 
 });
 
-module.exports = mongoose.model('Quizes', QuizesSchema);
+module.exports = mongoose.model('Question', QuestionSchema);

@@ -69,22 +69,18 @@ module.exports = {
     },
 
     //Get one deck
-    getone: function (req, res) {
+    getone: async function (req, res) {
         var id = req.params.id;
-        DeckModel.findOne({_id: id}, function (err, Deck) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting Deck.',
-                    error: err
-                });
-            }
-            if (!Deck) {
-                return res.status(404).json({
-                    message: 'No such Deck found'
-                });
-            }
-            return res.json({message: "Found this Deck", data: Deck});
-        });
+        try{
+            let onedeck = await DeckModel.find({_id: id}).populate('deckquestions').exec();
+            return res.status(200).json({data: onedeck});
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: 'Error when getting Deck.',
+                error: err
+            });
+        }
     },
 
     //Delete a deck
@@ -104,7 +100,7 @@ module.exports = {
     //Get  deck by a particular user
     userdeck: async function (req, res) {
         try{
-            let alluserdecks = await DeckModel.find({deckgenerator: req.verified._id}).exec();
+            let alluserdecks = await DeckModel.find({deckgenerator: req.verified._id}).populate('deckquestions').exec();
             return res.status(200).json({data: alluserdecks});
         }
         catch(err) {
@@ -118,7 +114,7 @@ module.exports = {
     //Get all public decks
     public: async function (req, res) {
         try{
-            let alluserdecks = await DeckModel.find({public: true}).exec();
+            let alluserdecks = await DeckModel.find({public: true}).populate('deckquestions').exec();
             return res.status(200).json({data: alluserdecks});
         }
         catch(err) {
